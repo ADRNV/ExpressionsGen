@@ -32,7 +32,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// </summary>
         /// <param name="parameter">Requre parameter</param>
         /// <returns></returns>
-        internal ParameterExpression AddInContext(ParameterExpression parameter)
+        public ParameterExpression AddInContext(ParameterExpression parameter)
         {
             ParametersContext.Add(parameter);
 
