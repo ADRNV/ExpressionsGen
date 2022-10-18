@@ -1,8 +1,11 @@
 ﻿using ExpressionUtils.Core;
+using ExpressionUtils.ExpressionsBuilder.OperationsResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +25,12 @@ namespace ExpressionUtils.ExpressionsBuilder
         public static ExpressionBuilder Constant<T>(this ExpressionBuilder expressionBuilder, T value)
         {
             expressionBuilder.Expression = Expression.Constant(value);
+
+            var resolver = ManageResolver<ConstantOperationResolver>(expressionBuilder, typeof(ConstantOperationResolver));
+
+            var expression = resolver.Resolve(expressionBuilder.Expression, expressionBuilder.LastOperation, Expression.Constant(value, typeof(T)));
+
+            expressionBuilder.Expression = expression;
 
             return expressionBuilder;
         }
@@ -73,21 +82,28 @@ namespace ExpressionUtils.ExpressionsBuilder
             return expressionBuilder;
         }
 
+        public static ExpressionBuilder NestedExpression(this ExpressionBuilder root, ExpressionBuilder nestedExpressionBuilder)
+        {
+            root.Expression = nestedExpressionBuilder.Expression;
+
+            return root;
+        }
         #endregion
 
-        #region Operations
 
-        /// <summary>
-        /// Add expression and constant value
-        /// </summary>
-        /// <typeparam name="T">Constant type</typeparam>
-        /// <param name="expressionBuilder">Builder</param>
-        /// <param name="right">your value</param>
-        /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
-        public static ExpressionBuilder Add<T>(this ExpressionBuilder expressionBuilder, T right)
+
+        #region Operations
+        public static ExpressionBuilder Add<T>(this ExpressionBuilder expressionBuilder)
         {
-            expressionBuilder.Expression = Expression.Add(expressionBuilder.Expression, Expression.Constant(right));
-       
+            expressionBuilder.LastOperation = ExpressionType.Add;
+
+            return expressionBuilder;
+        }
+
+        public static ExpressionBuilder Substract<T>(this ExpressionBuilder expressionBuilder)
+        {
+            expressionBuilder.LastOperation = ExpressionType.Subtract;
+
             return expressionBuilder;
         }
 
@@ -97,49 +113,38 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// <typeparam name="TParam">Parameter type</typeparam>
         /// <param name="expressionBuilder">Builder</param>
         /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
-        public static ExpressionBuilder Add<TParam>(this ExpressionBuilder expressionBuilder)
-        {
-            var parameter = Expression.Parameter(typeof(TParam));
+        //public static ExpressionBuilder Add<TParam>(this ExpressionBuilder expressionBuilder)
+        //{
+        //    var parameter = Expression.Parameter(typeof(TParam));
 
-            expressionBuilder.AddInContext(parameter);
+        //    expressionBuilder.AddInContext(parameter);
 
-            expressionBuilder.Expression = Expression.Add(expressionBuilder.Expression, parameter);
+        //    expressionBuilder.Expression = Expression.Add(expressionBuilder.Expression, parameter);
 
-            return expressionBuilder;
-        }
-
-        /// <summary>
-        /// Multiplies exprission and constant value
-        /// </summary>
-        /// <typeparam name="T">Type of constant</typeparam>
-        /// <param name="expressionBuilder">Builder</param>
-        /// <param name="right">Value</param>
-        /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
-        public static ExpressionBuilder Multiply<T>(this ExpressionBuilder expressionBuilder, T right)
-        {
-            expressionBuilder.Expression = Expression.Multiply(expressionBuilder.Expression, Expression.Constant(right));
-
-            return expressionBuilder;
-        }
-
-        /// <summary>
-        /// Multiplies exprission and parameter
-        /// </summary>
-        /// <typeparam name="TParam">Type of parameter</typeparam>
-        /// <param name="expressionBuilder">Builder</param>
-        /// <param name="right">Value</param>
-        /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
-        public static ExpressionBuilder Multiply<TParam>(this ExpressionBuilder expressionBuilder)
-        {
-            var parameter = Expression.Parameter(typeof(TParam));
-
-            expressionBuilder.AddInContext(parameter);
-
-            expressionBuilder.Expression = Expression.Add(expressionBuilder.Expression, parameter);
-
-            return expressionBuilder;
-        }
-
+        //    return expressionBuilder;
+        //}
         #endregion
+
+        //TODO write manage resolver logic
+        //Method must retur resolver
+        internal static IOperationResolver ManageResolver<TResolver>(ExpressionBuilder expressionBuilder, Type resolverType) where TResolver: class, IOperationResolver
+        {
+            if (expressionBuilder?.LastOperation is not null)
+            {
+                if (!expressionBuilder.Resolvers.TryGetValue(resolverType, out var resolver))
+                {
+                    resolver = Activator.CreateInstance(resolverType) as
+                        IOperationResolver;
+
+                    expressionBuilder.Resolvers.Add(resolverType, resolver);
+                }
+
+                return resolver;
+            }
+            else
+            {
+                return expressionBuilder.Resolvers[resolverType];
+            }
+        }
     }
 }

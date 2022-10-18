@@ -1,4 +1,5 @@
 ﻿using ExpressionUtils.Core;
+using ExpressionUtils.ExpressionsBuilder.OperationsResolver;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -14,8 +15,11 @@ namespace ExpressionUtils.ExpressionsBuilder
     /// </summary>
     public class ExpressionBuilder : IExpressionBuilder
     {
+        public Dictionary<Type, IOperationResolver> Resolvers { get; set; } = new();
+
         internal Expression Expression { get; set; }
 
+        internal ExpressionType LastOperation;
         public List<ParameterExpression> ParametersContext { get; private set; } = new();
 
         /// <summary>
