@@ -9,6 +9,6 @@ namespace ExpressionUtils.Core
 {
     public interface IOperationResolver
     {
-        Expression Resolve(Expression left, ExpressionType operation, Expression right);
+        Expression Resolve(Expression left, ExpressionType? operation, Expression right);
     }
 }

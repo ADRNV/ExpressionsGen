@@ -15,6 +15,6 @@ namespace ExpressionUtils.ExpressionsBuilder.OperationsResolver
 
         }
 
-        public abstract Expression Resolve(Expression left, ExpressionType operation, Expression right);
+        public abstract Expression Resolve(Expression left, ExpressionType? operation, Expression right);
     }
 }

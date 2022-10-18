@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace ExpressionUtils.ExpressionsBuilder.OperationsResolver
 {
-    public class ConstantOperationResolver : OperationResolverBase
+    public class OperationResolver : OperationResolverBase
     {
-        public ConstantOperationResolver()
+        public OperationResolver()
         {
 
         }
 
-        public override Expression Resolve(Expression left, ExpressionType operation, Expression right)
+        public override Expression Resolve(Expression left, ExpressionType? operation, Expression right)
         {
             switch (operation)
             {
                 case ExpressionType.Add:                    
-                       return Expression
-                        .Add(left, right);
+                     return Expression
+                       .Add(left, right);
                 case ExpressionType.Subtract:
                     return Expression
                      .Subtract(left, right);

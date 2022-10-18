@@ -19,7 +19,7 @@ namespace ExpressionUtils.ExpressionsBuilder
 
         internal Expression Expression { get; set; }
 
-        internal ExpressionType LastOperation;
+        internal ExpressionType? LastOperation = null;
         public List<ParameterExpression> ParametersContext { get; private set; } = new();
 
         /// <summary>
