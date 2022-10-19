@@ -1,13 +1,6 @@
 ﻿using ExpressionUtils.Core;
 using ExpressionUtils.ExpressionsBuilder.OperationsResolver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressionUtils.ExpressionsBuilder
 {
@@ -40,7 +33,7 @@ namespace ExpressionUtils.ExpressionsBuilder
 
                 return expressionBuilder;
             }
-               
+
         }
 
         /// <summary>
@@ -80,7 +73,7 @@ namespace ExpressionUtils.ExpressionsBuilder
             foreach (var methodParameter in metadata.GetParameters())
             {
 
-                var parameter = Expression.Parameter(methodParameter.GetType()); 
+                var parameter = Expression.Parameter(methodParameter.GetType());
 
                 expressionBuilder.AddInContext(parameter);
 
@@ -132,7 +125,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         }
         #endregion
 
-        internal static IOperationResolver ManageResolver<TResolver>(ExpressionBuilder expressionBuilder, Type resolverType) where TResolver: class, IOperationResolver
+        internal static IOperationResolver ManageResolver<TResolver>(ExpressionBuilder expressionBuilder, Type resolverType) where TResolver : class, IOperationResolver
         {
             if (expressionBuilder?.LastOperation is not null)
             {

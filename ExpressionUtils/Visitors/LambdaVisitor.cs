@@ -1,5 +1,4 @@
-﻿using ExpressionUtils.ExpressionsDescriptors;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace ExpressionUtils.Visitors
 {
@@ -16,7 +15,7 @@ namespace ExpressionUtils.Visitors
             {
                 CreateFromExpression(parameter);
             }
-       
+
         }
     }
 }

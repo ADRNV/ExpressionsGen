@@ -1,15 +1,9 @@
 ﻿using ExpressionUtils.Core;
-using ExpressionUtils.ExpressionsDescriptors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressionUtils.Visitors
 {
-    public abstract class VisitorBase<E> : IVisitor where E: Expression
+    public abstract class VisitorBase<E> : IVisitor where E : Expression
     {
         protected readonly E _node;
 

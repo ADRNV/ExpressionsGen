@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExpressionUtils.Core;
 using System.Linq.Expressions;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using ExpressionUtils.Core;
-using ExpressionUtils.Visitors;
 
 namespace ExpressionUtils.ExpressionsDescriptors
 {
@@ -14,7 +7,7 @@ namespace ExpressionUtils.ExpressionsDescriptors
     /// Discribe expression in user-friendly format 
     /// </summary>
     /// <typeparam name="T">Expression type</typeparam>
-    public class ExpressionDescriptorBase<T> : IDescriptor where T: Expression
+    public class ExpressionDescriptorBase<T> : IDescriptor where T : Expression
     {
         protected readonly T _expression;
 

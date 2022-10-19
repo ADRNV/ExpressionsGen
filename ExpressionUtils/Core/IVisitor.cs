@@ -1,7 +1,4 @@
-﻿using ExpressionUtils.ExpressionsDescriptors;
-using System.Linq.Expressions;
-
-namespace ExpressionUtils.Core
+﻿namespace ExpressionUtils.Core
 {
     /// <summary>
     /// Represents base visitor logic

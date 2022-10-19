@@ -1,12 +1,10 @@
-﻿using ExpressionUtils.Core;
-using ExpressionUtils.ExpressionsDescriptors;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace ExpressionUtils.Visitors
 {
     internal class BinaryVisitor : VisitorBase<BinaryExpression>
     {
-        public BinaryVisitor(BinaryExpression binaryExpression): base(binaryExpression)
+        public BinaryVisitor(BinaryExpression binaryExpression) : base(binaryExpression)
         {
 
         }

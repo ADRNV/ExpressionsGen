@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressionUtils.ExpressionsDescriptors
 {
@@ -17,7 +12,7 @@ namespace ExpressionUtils.ExpressionsDescriptors
         /// Contains all lambda parameters 
         /// </summary>
         public ReadOnlyCollection<ParameterExpression> Parameters { get => _expression.Parameters; }
-        
+
         /// <summary>
         /// Return type of lambda
         /// </summary>
@@ -34,7 +29,7 @@ namespace ExpressionUtils.ExpressionsDescriptors
         /// <param name="expression">Lamda expression</param>
         public LambdaExpressionDescriptor(LambdaExpression expression) : base(expression)
         {
-      
+
         }
     }
 }
