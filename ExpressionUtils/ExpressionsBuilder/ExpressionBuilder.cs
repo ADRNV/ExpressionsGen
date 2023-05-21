@@ -8,7 +8,7 @@ namespace ExpressionUtils.ExpressionsBuilder
     /// </summary>
     public class ExpressionBuilder : IExpressionBuilder
     {
-        public Dictionary<Type, IOperationResolver> Resolvers { get; set; } = new();
+        public Dictionary<Type, IOperationResolver> Resolvers { get; private set; } = new();
 
         internal Expression Expression { get; set; }
 

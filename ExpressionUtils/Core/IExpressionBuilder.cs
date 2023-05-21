@@ -7,6 +7,14 @@ namespace ExpressionUtils.Core
     /// </summary>
     public interface IExpressionBuilder
     {
+        public Dictionary<Type, IOperationResolver> Resolvers { get; }
+
+        internal Expression Expression { get; set; }
+
+        internal ExpressionType? LastOperation { get; set; }
+
+        public List<ParameterExpression> ParametersContext { get; }
+
         LambdaExpression Build();
 
         ParameterExpression AddInContext(ParameterExpression parameter);

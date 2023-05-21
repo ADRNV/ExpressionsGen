@@ -15,7 +15,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// <param name="expressionBuilder">Builder</param>
         /// <param name="value">Your constant</param>
         /// <returns>Builder for next operation</returns>
-        public static ExpressionBuilder Constant<T>(this ExpressionBuilder expressionBuilder, T value)
+        public static IExpressionBuilder Constant<T>(this IExpressionBuilder expressionBuilder, T value)
         {
             try
             {
@@ -42,17 +42,34 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// <typeparam name="TParam">Parameter type</typeparam>
         /// <param name="expressionBuilder">Builder</param>
         /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
-        public static ExpressionBuilder Parameter<TParam>(this ExpressionBuilder expressionBuilder)
+        public static IExpressionBuilder Parameter<TParam>(this IExpressionBuilder expressionBuilder)
         {
-            var parameter = Expression.Parameter(typeof(TParam));
+            return Parameter<TParam>(expressionBuilder, $"Param{Guid.NewGuid()}");
+        }
+
+        /// <summary>
+        /// Add parameter in expression
+        /// </summary>
+        /// <typeparam name="TParam">Parameter type</typeparam>
+        /// <param name="name">Name of parameter</param>
+        /// <param name="expressionBuilder">Builder</param>
+        /// <returns> <see cref="ExpressionBuilder"/> - builder for next operation</returns>
+        public static IExpressionBuilder Parameter<TParam>(this IExpressionBuilder expressionBuilder, string name)
+        {
+            var parameter = Expression.Parameter(typeof(TParam), name);
 
             expressionBuilder.ParametersContext.Add(parameter);
 
-            var resolver = ManageResolver<OperationResolver>(expressionBuilder, typeof(OperationResolver));
+            try
+            {
+                var resolver = ManageResolver<OperationResolver>(expressionBuilder, typeof(OperationResolver));
 
-            var expression = resolver.Resolve(expressionBuilder.Expression, expressionBuilder.LastOperation, parameter);
-
-            expressionBuilder.Expression = expression;
+                var expression = resolver.Resolve(expressionBuilder.Expression, expressionBuilder.LastOperation, parameter);
+            }
+            catch
+            {
+                expressionBuilder.Expression = Expression.Parameter(typeof(TParam), name);
+            }
 
             return expressionBuilder;
         }
@@ -64,7 +81,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// <param name="expressionBuilder"></param>
         /// <param name="lambda"></param>
         /// <returns></returns>
-        public static ExpressionBuilder Lambda<TLambda>(this ExpressionBuilder expressionBuilder, TLambda lambda)
+        public static IExpressionBuilder Lambda<TLambda>(this IExpressionBuilder expressionBuilder, TLambda lambda)
         {
             var metadata = lambda.GetType().GetMethods()[0];
 
@@ -87,7 +104,7 @@ namespace ExpressionUtils.ExpressionsBuilder
             return expressionBuilder;
         }
 
-        public static ExpressionBuilder NestedExpression(this ExpressionBuilder root, ExpressionBuilder nestedExpressionBuilder)
+        public static IExpressionBuilder NestedExpression(this IExpressionBuilder root, ExpressionBuilder nestedExpressionBuilder)
         {
             root.Expression = nestedExpressionBuilder.Expression;
 
@@ -96,28 +113,28 @@ namespace ExpressionUtils.ExpressionsBuilder
         #endregion
 
         #region Operations
-        public static ExpressionBuilder Add<T>(this ExpressionBuilder expressionBuilder)
+        public static IExpressionBuilder Add<T>(this IExpressionBuilder expressionBuilder)
         {
             expressionBuilder.LastOperation = ExpressionType.Add;
 
             return expressionBuilder;
         }
 
-        public static ExpressionBuilder Substract<T>(this ExpressionBuilder expressionBuilder)
+        public static IExpressionBuilder Substract<T>(this IExpressionBuilder expressionBuilder)
         {
             expressionBuilder.LastOperation = ExpressionType.Subtract;
 
             return expressionBuilder;
         }
 
-        public static ExpressionBuilder Multiply<T>(this ExpressionBuilder expressionBuilder)
+        public static IExpressionBuilder Multiply<T>(this IExpressionBuilder expressionBuilder)
         {
             expressionBuilder.LastOperation = ExpressionType.Multiply;
 
             return expressionBuilder;
         }
 
-        public static ExpressionBuilder Divide<T>(this ExpressionBuilder expressionBuilder)
+        public static IExpressionBuilder Divide<T>(this IExpressionBuilder expressionBuilder)
         {
             expressionBuilder.LastOperation = ExpressionType.Divide;
 
@@ -125,7 +142,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         }
         #endregion
 
-        internal static IOperationResolver ManageResolver<TResolver>(ExpressionBuilder expressionBuilder, Type resolverType) where TResolver : class, IOperationResolver
+        internal static IOperationResolver ManageResolver<TResolver>(IExpressionBuilder expressionBuilder, Type resolverType) where TResolver : class, IOperationResolver
         {
             if (expressionBuilder?.LastOperation is not null)
             {
