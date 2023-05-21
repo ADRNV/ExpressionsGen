@@ -14,7 +14,8 @@ User-friendly API-Interface for writing expression
     var lambda = new ExpressionBuilder()
     .Constant(40)
     .Add<int>()
-    .Constant(2);
+    .Constant(2)
+    .Build();
 ```
     
 or this ?
