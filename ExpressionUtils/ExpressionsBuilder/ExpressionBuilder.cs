@@ -10,9 +10,10 @@ namespace ExpressionUtils.ExpressionsBuilder
     {
         public Dictionary<Type, IOperationResolver> Resolvers { get; private set; } = new();
 
-        internal Expression Expression { get; set; }
+        public Expression Expression { get; set; }
 
-        internal ExpressionType? LastOperation = null;
+        public ExpressionType? LastOperation { get; set; }
+        
         public List<ParameterExpression> ParametersContext { get; private set; } = new();
 
         /// <summary>

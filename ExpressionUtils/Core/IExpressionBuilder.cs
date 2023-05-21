@@ -11,7 +11,7 @@ namespace ExpressionUtils.Core
 
         internal Expression Expression { get; set; }
 
-        internal ExpressionType? LastOperation { get; set; }
+        public ExpressionType? LastOperation { get; internal set; }
 
         public List<ParameterExpression> ParametersContext { get; }
 
