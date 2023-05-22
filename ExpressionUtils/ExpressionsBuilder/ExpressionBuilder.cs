@@ -13,7 +13,7 @@ namespace ExpressionUtils.ExpressionsBuilder
         public Expression Expression { get; set; }
 
         public ExpressionType? LastOperation { get; set; }
-        
+
         public List<ParameterExpression> ParametersContext { get; private set; } = new();
 
         /// <summary>

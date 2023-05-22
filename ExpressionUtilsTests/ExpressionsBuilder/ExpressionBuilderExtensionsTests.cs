@@ -1,16 +1,8 @@
-﻿using NUnit.Framework;
-using ExpressionUtils.ExpressionsBuilder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
-using NUnit.Framework.Constraints;
-using ExpressionUtils.Core;
+﻿using ExpressionUtils.Core;
 using ExpressionUtilsTests.Helpers.Di;
 using Ninject;
+using NUnit.Framework;
+using System.Linq.Expressions;
 
 namespace ExpressionUtils.ExpressionsBuilder.Tests
 {
@@ -39,7 +31,7 @@ namespace ExpressionUtils.ExpressionsBuilder.Tests
 
             //assert
             bool equalNodeTypes = expressionBuilder.Body.NodeType == constantExpression.NodeType;
-            
+
             Assert.True(equalNodeTypes);
         }
 
@@ -57,7 +49,7 @@ namespace ExpressionUtils.ExpressionsBuilder.Tests
             //assert
 
             bool equalsNames = parameterExpression.Name == expressionBuilder.Parameters[0].Name;
-           
+
             bool equalsTypes = parameterExpression.Type == expressionBuilder.Parameters[0].Type;
 
             Assert.True(equalsNames);
@@ -92,28 +84,18 @@ namespace ExpressionUtils.ExpressionsBuilder.Tests
         public void AddTest()
         {
             //arrange
+            var addExpression = Expression.Add(Expression.Constant(42), Expression.Constant(42));
+
+            //act
             var expressionBuilder = _ioCKernel.Kernel.Get<IExpressionBuilder>()
                 .Constant(42)
                 .Add<int>()
                 .Constant(42)
                 .Build();
 
-            var addExpression = Expression.Add(Expression.Constant(42), Expression.Constant(42));
-
-            //act
-            var executionExpected = (int)Expression
-                .Lambda(addExpression)
-                .Compile()
-                .DynamicInvoke()!;
-
-            var executionActual = (int)expressionBuilder
-                .Compile()
-                .DynamicInvoke()!;
 
             //assert
             bool equalNodeTypes = expressionBuilder.Body.NodeType == addExpression.NodeType;
-
-            bool equalsResults = executionActual == executionExpected;
 
             Assert.True(equalNodeTypes);
         }
