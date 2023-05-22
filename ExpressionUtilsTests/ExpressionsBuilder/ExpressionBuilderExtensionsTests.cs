@@ -93,7 +93,6 @@ namespace ExpressionUtils.ExpressionsBuilder.Tests
                 .Constant(42)
                 .Build();
 
-
             //assert
             bool equalNodeTypes = expressionBuilder.Body.NodeType == addExpression.NodeType;
 
