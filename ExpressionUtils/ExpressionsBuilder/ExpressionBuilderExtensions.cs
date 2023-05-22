@@ -81,25 +81,15 @@ namespace ExpressionUtils.ExpressionsBuilder
         /// <param name="expressionBuilder"></param>
         /// <param name="lambda"></param>
         /// <returns></returns>
-        public static IExpressionBuilder Lambda<TLambda>(this IExpressionBuilder expressionBuilder, TLambda lambda)
+        public static IExpressionBuilder Lambda<TLambda>(this IExpressionBuilder expressionBuilder, LambdaExpression lambda)
         {
-            var metadata = lambda.GetType().GetMethods()[0];
+            //Adds parameter on top
+            //foreach (var parameter in lambda.Parameters)
+            //{
+            //    expressionBuilder.AddInContext(parameter);
+            //}
 
-            var lambdaParameters = new List<ParameterExpression>();
-
-            foreach (var methodParameter in metadata.GetParameters())
-            {
-
-                var parameter = Expression.Parameter(methodParameter.GetType());
-
-                expressionBuilder.AddInContext(parameter);
-
-                lambdaParameters.Add(parameter);
-            }
-
-            var l = Expression.Call(metadata, lambdaParameters);
-
-            expressionBuilder.Expression = l;
+            expressionBuilder.Expression = Expression.Lambda(lambda, lambda.Parameters).Body;
 
             return expressionBuilder;
         }

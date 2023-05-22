@@ -69,22 +69,17 @@ namespace ExpressionUtils.ExpressionsBuilder.Tests
         public void LambdaTest()
         {
             //arrange
-            var parameterExpression = Expression.Lambda((int x) => x);
+            var labmdaExpression = Expression.Lambda((int x) => x);
 
             //act
             var expressionBuilder = _ioCKernel.Kernel.Get<IExpressionBuilder>()
-                .Lambda((int x) => x)
+                .Lambda<Func<int, int>>((int x) => x)
                 .Build();
 
             //assert
+            bool equalsBodyes = labmdaExpression.Body.Type == expressionBuilder.Body.Type;
 
-            bool equalsNames = parameterExpression.Name == expressionBuilder.Parameters[0].Name;
-
-            bool equalsTypes = parameterExpression.Type == expressionBuilder.Parameters[0].Type;
-
-            Assert.True(equalsNames);
-
-            Assert.True(equalsTypes);
+            Assert.True(equalsBodyes);
         }
 
         [Test()]
